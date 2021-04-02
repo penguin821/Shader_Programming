@@ -53,6 +53,13 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Initialize model transform matrix :; used for rotating quad normal to parallel to camera direction
 	m_m4Model = glm::rotate(glm::mat4(1.0f), glm::radians(0.f), glm::vec3(1.f, 0.f, 0.f));
+
+	//Create test data
+	float tempVertices[] = { 0.f,0.f, 0.f, 1.f,0.f,0.f,1.f,1.f,0.f };
+	glGenBuffers(1, &m_VBO); // ★★★텍스쳐 메모리에 공간이 할당된건 아니고 아이디만 만들어진거임
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices), tempVertices, GL_STATIC_DRAW);
+	// 이제 VBO 아이디에 해당하는 논리적 GPU 메모리까지 할당해서 올라감
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -300,10 +307,11 @@ void Renderer::Test()
 
 	int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
 	glEnableVertexAttribArray(attribPosition);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
-	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLES, 0, 3); // 여기서부터 랜더링 시작 및 즉시 리턴 (병렬구조이므로)
 
 	glDisableVertexAttribArray(attribPosition);
 }
