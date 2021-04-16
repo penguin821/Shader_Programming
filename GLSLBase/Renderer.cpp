@@ -60,6 +60,11 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices), tempVertices, GL_STATIC_DRAW);
 	// 이제 VBO 아이디에 해당하는 논리적 GPU 메모리까지 할당해서 올라감
+	float tempVertices1[] = { 0.f,0.f, 0.f, -1.f,0.f,0.f,-1.f,1.f,0.f };
+	glGenBuffers(1, &m_VBO1); // ★★★텍스쳐 메모리에 공간이 할당된건 아니고 아이디만 만들어진거임
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW);
+	// 이제 VBO 아이디에 해당하는 논리적 GPU 메모리까지 할당해서 올라감
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -305,13 +310,27 @@ void Renderer::Test()
 {
 	glUseProgram(m_SolidRectShader);
 
-	int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
-	glEnableVertexAttribArray(attribPosition);
-	//glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	GLint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(VBOLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3); // 여기서부터 랜더링 시작 및 즉시 리턴 (병렬구조이므로)
+	GLint VBOLocation1 = glGetAttribLocation(m_SolidRectShader, "a_Position1");
+	glEnableVertexAttribArray(VBOLocation1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glVertexAttribPointer(VBOLocation1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glDisableVertexAttribArray(attribPosition);
+	static float gscale = 0.f;
+
+	GLint ScaleUniform = glGetUniformLocation(m_SolidRectShader, "u_Scale");
+	glUniform1f(ScaleUniform, gscale);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3); // 여기서부터 랜더링 시작 및 즉시 리턴 (병렬구조이므로), 파이프라인이 한번 돈다
+
+	gscale += 0.001f;
+	if (gscale > 1.f)
+		gscale = 0.f;
+
+	glDisableVertexAttribArray(VBOLocation);
+	glDisableVertexAttribArray(VBOLocation1);
 }
