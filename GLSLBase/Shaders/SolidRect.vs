@@ -1,15 +1,29 @@
 #version 450
 
-// in vec3 a_Position; // 사용자가 정의한 입력 값
-// layout (location = 0) in vec3 a_Position; // float 3개
-// layout (location = 1) in vec3 a_Position1; // float 3개, 총 6개
+in vec3 a_Position; // float 포지션 3개
+in vec3 a_Vel; // float 속도 3개
+in float a_EmitTime; // float 파티클 시작 시간 1개
 
-uniform float u_Scale;
+uniform float u_Time; // 누적 시간
 
-in vec3 a_Position; 
-in vec3 a_Position1;
+const vec3 c_Gravity = vec3(0, -2.8, 0);
 
 void main()
 {
-	gl_Position = vec4(a_Position*u_Scale, 1); // OpenGL 고유 출력값
+	float newTime = u_Time - a_EmitTime;
+
+	vec3 newpos = a_Position;
+
+	if (newTime < 0.0)
+	{
+		newpos = vec3(1000, 1000, 1000);
+	}
+	else
+	{
+		float t = newTime;
+		float tt = t * t;
+		newpos = newpos + t * a_Vel + 0.5 * c_Gravity * tt;
+	}
+	
+	gl_Position = vec4(newpos, 1); // OpenGL 고유 출력값
 }
