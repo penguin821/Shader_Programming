@@ -86,8 +86,8 @@ void Renderer::CreateVertexBufferObjects()
 
 void Renderer::CreateParticle(int count)
 {
-	int floatCount = count * (3 + 3 + 1) * 3 * 2;
-	// 총 갯수 * 버택스 하나에 들어가는 포인트 수(좌표3+속도3+파티클생성 시작시간1) * 버택스 갯수 * 삼각형 갯수
+	int floatCount = count * (3 + 3 + 1 + 1 + 1 + 1 + 1) * 3 * 2;
+	// 총 갯수 * 버택스 하나에 들어가는 포인트 수(좌표3+속도3+파티클생성 시작시간1+랜덤라이프타임1+주기1+폭1+value1) * 버택스 갯수 * 삼각형 갯수
 	float* particleVertices = new float[floatCount]; // 할당이라 heap에 저장 			
 	int vertexCount = count * 3 * 2; // drawarrays 할때 arg중 하나가 버택스 카운트 받는게 있음, 거기서 쓸것
 
@@ -99,18 +99,26 @@ void Renderer::CreateParticle(int count)
 		float randomValueX = 0.f;
 		float randomValueY = 0.f;
 		float randomValueZ = 0.f;
-		float randomValueVX = 0.f;
+		float randomValueVX = 1.f;
 		float randomValueVY = 0.f;
 		float randomValueVZ = 0.f;
 		float randomEmitTime = 0.f;
+		float randomLifeTime = 2.f;
+		float randomPeriod = 1.f; // 주기
+		float randomAmp = 1.f; // 주기
+		float randomValue = 1.f; // 주기
 
-		randomValueX = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
-		randomValueY = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
-		randomValueZ = 0;
-		randomValueVX = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
-		randomValueVY = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
+		//randomValueX = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
+		//randomValueY = ((float)rand() / (float)RAND_MAX - 0.5f) * 2.f;
+		//randomValueZ = 0;
+		randomValueVX = ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
+		randomValueVY = ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
 		randomValueVZ = 0;
 		randomEmitTime = ((float)rand() / (float)RAND_MAX) * 10.f;
+		randomLifeTime = ((float)rand() / (float)RAND_MAX) * 2.f;
+		randomPeriod = ((float)rand() / (float)RAND_MAX) * 10.f + 1.f;
+		randomAmp = ((float)rand() / (float)RAND_MAX) * 0.02f - 0.01f;
+		randomValue = (float)rand() / (float)RAND_MAX;
 
 		// v0 왼아
 		particleVertices[index] = -particleSize / 2.f + randomValueX;
@@ -127,6 +135,14 @@ void Renderer::CreateParticle(int count)
 		index++; // Vel XYZ
 		particleVertices[index] = randomEmitTime;
 		index++; // Emit Time
+		particleVertices[index] = randomLifeTime;
+		index++; // Life Time
+		particleVertices[index] = randomPeriod;
+		index++; // Period
+		particleVertices[index] = randomAmp;
+		index++; // Amp
+		particleVertices[index] = randomValue;
+		index++; // Value
 
 		// v1 오아
 		particleVertices[index] = particleSize / 2.f + randomValueX;
@@ -143,6 +159,14 @@ void Renderer::CreateParticle(int count)
 		index++; // Vel XYZ
 		particleVertices[index] = randomEmitTime;
 		index++; // Emit Time
+		particleVertices[index] = randomLifeTime;
+		index++; // Life Time
+		particleVertices[index] = randomPeriod;
+		index++; // Period
+		particleVertices[index] = randomAmp;
+		index++; // Amp
+		particleVertices[index] = randomValue;
+		index++; // Value
 
 		// v2 오위
 		particleVertices[index] = particleSize / 2.f + randomValueX;
@@ -159,6 +183,14 @@ void Renderer::CreateParticle(int count)
 		index++; // Vel XYZ
 		particleVertices[index] = randomEmitTime;
 		index++; // Emit Time
+		particleVertices[index] = randomLifeTime;
+		index++; // Life Time
+		particleVertices[index] = randomPeriod;
+		index++; // Period
+		particleVertices[index] = randomAmp;
+		index++; // Amp
+		particleVertices[index] = randomValue;
+		index++; // Value
 
 		// v3 왼아
 		particleVertices[index] = -particleSize / 2.f + randomValueX;
@@ -175,6 +207,14 @@ void Renderer::CreateParticle(int count)
 		index++; // Vel XYZ
 		particleVertices[index] = randomEmitTime;
 		index++; // Emit Time
+		particleVertices[index] = randomLifeTime;
+		index++; // Life Time
+		particleVertices[index] = randomPeriod;
+		index++; // Period
+		particleVertices[index] = randomAmp;
+		index++; // Amp
+		particleVertices[index] = randomValue;
+		index++; // Value
 
 		// v4 오위
 		particleVertices[index] = particleSize / 2.f + randomValueX;
@@ -191,6 +231,14 @@ void Renderer::CreateParticle(int count)
 		index++; // Vel XYZ
 		particleVertices[index] = randomEmitTime;
 		index++; // Emit Time
+		particleVertices[index] = randomLifeTime;
+		index++; // Life Time
+		particleVertices[index] = randomPeriod;
+		index++; // Period
+		particleVertices[index] = randomAmp;
+		index++; // Amp
+		particleVertices[index] = randomValue;
+		index++; // Value
 
 		// v5 왼위
 		particleVertices[index] = -particleSize / 2.f + randomValueX;
@@ -207,6 +255,14 @@ void Renderer::CreateParticle(int count)
 		index++; // Vel XYZ
 		particleVertices[index] = randomEmitTime;
 		index++; // Emit Time
+		particleVertices[index] = randomLifeTime;
+		index++; // Life Time
+		particleVertices[index] = randomPeriod;
+		index++; // Period
+		particleVertices[index] = randomAmp;
+		index++; // Amp
+		particleVertices[index] = randomValue;
+		index++; // Value
 	}
 
 	glGenBuffers(1, &m_VBOManyParticle); // 파티클을 담기위한 vbo 생성
@@ -481,27 +537,52 @@ void Renderer::Particle()
 	GLuint shader = m_SolidRectShader;
 	glUseProgram(shader); // shader program select
 
+	int one_cycle = 11;
+
 	GLint VBOLocation = glGetAttribLocation(shader, "a_Position");
 	glEnableVertexAttribArray(VBOLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
-	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid*)0);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)0);
 
 	GLint VBOVLocation = glGetAttribLocation(shader, "a_Vel");
 	glEnableVertexAttribArray(VBOVLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
-	glVertexAttribPointer(VBOVLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid*)(sizeof(float) * 3));
+	glVertexAttribPointer(VBOVLocation, 3, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)(sizeof(float) * 3));
 	// 끝에 변수 2개 중 첫번째 = stride : 다음꺼 읽을때 얼마만큼 띄우고 다시 정보를 읽을 것이다.
 	// 끝에 변수 2개 중 두번째 = 처음 읽을 위치
 
 	GLint VBOEmitLocation = glGetAttribLocation(shader, "a_EmitTime");
 	glEnableVertexAttribArray(VBOEmitLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
-	glVertexAttribPointer(VBOEmitLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid*)(sizeof(float) * 6));
+	glVertexAttribPointer(VBOEmitLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)(sizeof(float) * 6));
+
+	GLint VBOLifeLocation = glGetAttribLocation(shader, "a_LifeTime");
+	glEnableVertexAttribArray(VBOLifeLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+	glVertexAttribPointer(VBOLifeLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)(sizeof(float) * 7));
+
+	GLint VBOPeriodLocation = glGetAttribLocation(shader, "a_Period");
+	glEnableVertexAttribArray(VBOPeriodLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+	glVertexAttribPointer(VBOPeriodLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)(sizeof(float) * 8));
+
+	GLint VBOAmpLocation = glGetAttribLocation(shader, "a_Amp");
+	glEnableVertexAttribArray(VBOAmpLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+	glVertexAttribPointer(VBOAmpLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)(sizeof(float) * 9));
+
+	GLint VBOValueLocation = glGetAttribLocation(shader, "a_Value");
+	glEnableVertexAttribArray(VBOValueLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+	glVertexAttribPointer(VBOValueLocation, 1, GL_FLOAT, GL_FALSE, sizeof(float) * one_cycle, (GLvoid*)(sizeof(float) * 10));
 
 	GLuint UniformTime = glGetUniformLocation(shader, "u_Time");
 	glUniform1f(UniformTime, g_Time);
 
+	GLuint UniformExforce = glGetUniformLocation(shader, "u_Exforce");
+	glUniform3f(UniformExforce, sin(g_Time), cos(g_Time), 0);
+
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
 
-	g_Time += 0.0006;
+	g_Time += 0.006;
 }
